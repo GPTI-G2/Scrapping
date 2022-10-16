@@ -1,0 +1,4 @@
+La arquitectura del Scrapper funcionara de la siguiente manera:
+
+El scrapper se correra cada cierto tiempo obteniendo los datos que se quieran obtener, enviando los datos filtrados en formato JSON al backend, en donde ese equipo se encargara
+de recibir la informacion, ajustarla a su funcionamiento y almacenar la informacion en la Base de datos.
