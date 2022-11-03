@@ -10,3 +10,10 @@ Primera instancia de scrapper funcional
 Se define la estrategia para crear la documentacion
 Creacion de domcumentos y archivos necesarios
 Diseño de arquitectura establecida
+
+19/10 - 3/11
+
+Desarrollo del scrapper
+filtracion de datos
+Generacion de payload para enviar al backend con formato solicitado
+Intento a coneccion con backend (Fallida)
