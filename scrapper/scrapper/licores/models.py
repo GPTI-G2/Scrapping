@@ -10,15 +10,19 @@ def style_string_to_dict(style: str) -> Dict[str, str]:
     style_dict[key] = value
   return style_dict
 
-class ScrapTomates(ABC):
+class ScrapLicores(ABC):
   def __init__(
       self,
+      types: List[str],
       links: List[str],
+      sizes: List[str],
       classes: Dict[str, List[str]],
       expected_class: str
     ):
     self.links = links
     self.classes = classes
+    self.types = types
+    self.sizes = sizes
     self.expected_class = expected_class
     self.tags = ['div', 'span', 'h1', 'h2', 'p']
     self.columns = ["sku", "Name", "image_url", "Price"]
@@ -32,6 +36,10 @@ class ScrapTomates(ABC):
     ...
 
   @abstractmethod
+  def get_brand(self, html_soup, info):
+    ...
+  
+  @abstractmethod
   def get_names(self, html_soup, info):
     ...
 
@@ -44,34 +52,39 @@ class ScrapTomates(ABC):
     ...
 
   
-  def get_info_from_url(self, url):
+  def get_info_from_url(self, url, product_type, size):
     html_soup = get_html_soup(url, expected_class=self.expected_class)
     info = []
     info = self.get_skus(html_soup, info)
+    info = self.get_brand(html_soup, info)
+    info.append(size)
     info = self.get_names(html_soup, info)
     info = self.get_image_url(html_soup, info)
     info = self.get_price(html_soup, info)
+    info.append(product_type)
     return info
 
 
-class ScrapTomatesJumbo(ScrapTomates):
+class ScrapLicoresJumbo(ScrapLicores):
   def __init__(
       self,
+      types: List[str],
       links: List[str],
+      sizes: List[str],
       classes: Dict[str, List[str]] = {
           "sku": ["product-sku"], 
           "name": ["product-name"],
-          # "brand": #TODO
-          # "size": #TODO
+          "brand": ["product-brand"],
           "image_url": ["zoomed-image"],
           "price": ["price-best", "product-sigle-price-wrapper"],
-          # "type": #TODO
       },
       expected_class: str = "zoomed-image"
     ):
     
     self.links = links
     self.classes = classes
+    self.types = types
+    self.sizes = sizes
     self.expected_class = expected_class
     self.tags = ['div', 'span', 'h1', 'h2', 'p']
     self.columns = ["sku", "Name", "image_url", "Price"]
@@ -123,6 +136,27 @@ class ScrapTomatesJumbo(ScrapTomates):
         info.append(None)
     return info
 
+  def get_brand(self, html_soup, info):
+    found = False
+    for tag in self.tags:
+        for className in self.classes["brand"]:
+            brand = (html_soup.find(tag, class_=className))
+            if brand:
+                found = True
+                break
+        if found:
+            break
+    if found:
+        try:
+            brand = brand.string
+            info.append(brand)
+        except Exception as e:
+            print(e)
+            info.append(None)
+    else:
+        info.append(None)
+    return info
+
   def get_image_url(self, html_soup, info):
     found = False
     for tag in self.tags:
@@ -166,13 +200,16 @@ class ScrapTomatesJumbo(ScrapTomates):
     return info
 
 
-class ScrapTomatesLider(ScrapTomates):
+class ScrapLicoresLider(ScrapLicores):
   def __init__(
       self,
+      types: List[str],
       links: List[str],
+      sizes: List[str],
       classes: Dict[str, List[str]] = {
           "sku": ["pdp-desktop-item-number"],
           "name": ["product-detail-display-name"],
+          "brand": ["prduct-detail-cart__brand-link"],
           "image_url": ["styled__FigureContainer-sc-13lpau7-2"],
           "price": ["pdp-mobile-sales-price"],
       },
@@ -180,6 +217,8 @@ class ScrapTomatesLider(ScrapTomates):
     ):
     
     self.links = links
+    self.types = types
+    self.sizes = sizes
     self.classes = classes
     self.expected_class = expected_class
     self.tags = ['div', 'span', 'h1', 'h2', 'p']
@@ -225,6 +264,27 @@ class ScrapTomatesLider(ScrapTomates):
         try:
             name = name.string
             info.append(name)
+        except Exception as e:
+            print(e)
+            info.append(None)
+    else:
+        info.append(None)
+    return info
+
+  def get_brand(self, html_soup, info):
+    found = False
+    for tag in self.tags:
+        for className in self.classes["brand"]:
+            brand = (html_soup.find(tag, class_=className))
+            if brand:
+                found = True
+                break
+        if found:
+            break
+    if found:
+        try:
+            brand = brand.string
+            info.append(brand)
         except Exception as e:
             print(e)
             info.append(None)
