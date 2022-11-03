@@ -13,6 +13,7 @@ def search(scrapper: Union[ScrapTomates, ScrapLicores]) -> List[List[str]]:
             scrapper.sizes[index],
         )
         productos_filtrados.append(info)
+        
     print(productos_filtrados)
     return (productos_filtrados)
 
@@ -42,8 +43,9 @@ def search(scrapper: Union[ScrapTomates, ScrapLicores]) -> List[List[str]]:
 """
 
 def format_body(keys: List[str], values: List[str]) -> Dict[str, str]:
-    if (len(keys) != len(values)):
-        print("Lengths don't match")
-        raise ValueError("Lengths do not match")
-    body = {[keys[i]]: values[i] for i in range(len(values))}
+    body = []
+    print(values)
+    print(values[0])
+    for i in range(len(values)):
+        body.append({keys[j]: values[i][j] for j in range(len(values[i]))})
     return body

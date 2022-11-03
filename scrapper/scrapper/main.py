@@ -1,26 +1,6 @@
-# from scrapper.tomates.models import ScrapTomatesJumbo, ScrapTomatesLider
 from scrapper.licores.models import ScrapLicoresJumbo, ScrapLicoresLider
-from scrapper.driver.search import search
+from scrapper.driver.search import search, format_body
 
-# Tomates
-# links_jumbo = [
-#     "https://www.jumbo.cl/tomate-larga-vida-granel/p",
-#     "https://www.jumbo.cl/tomate-malla-1-kg/p",
-#     "https://www.jumbo.cl/tomate-salad-granel/p",
-#     "https://www.jumbo.cl/tomate-jumbo-granel-beef-2/p"
-# ]
-# scrapper_jumbo = ScrapTomatesJumbo(links_jumbo)
-
-# links_lider = [
-#     "https://www.lider.cl/supermercado/product/sku/327604/tomates-tomate-larga-vida-granel-500-g-2-a-3-un-aprox",
-#     "https://www.lider.cl/supermercado/product/sku/325702/tomates-tomate-larga-vida-malla-1-kg",
-#     "https://www.lider.cl/supermercado/product/sku/452098/tomates-tomate-pera-granel-500-g-3-a-4-un-aprox",
-#     "https://www.lider.cl/supermercado/product/sku/323558/tomates-tomate-beef-granel-500-g"
-# ]
-# scrapper_lider = ScrapTomatesLider(links_lider)
-
-# productos_jumbo = search(scrapper_jumbo)
-# productos_lider = search(scrapper_lider)
 
 # Licores
 links_lider = {
@@ -49,16 +29,40 @@ sizes = [
 ]
 
 scrapper_jumbo = ScrapLicoresJumbo(
-    types= links_jumbo.keys(),
-    links = links_jumbo.values(),
+    types= list(links_jumbo.keys()),
+    links = list(links_jumbo.values()),
     sizes = sizes,
+    store = "Jumbo"
 )
 
 scrapper_lider = ScrapLicoresLider(
-    types= links_lider.keys(),
-    links = links_lider.values(),
+    types= list(links_lider.keys()),
+    links = list(links_lider.values()),
     sizes = sizes,
+    store = "Lider"
 )
 
 productos_jumbo = search(scrapper_jumbo)
 productos_lider = search(scrapper_lider)
+
+print(productos_jumbo)
+print(productos_lider)
+
+#TODO: sent data to backend
+keys = [
+    "sku",
+    "name",
+    "brand",
+    "size",
+    "image_url",
+    "price",
+    "type",
+    "store"
+]
+
+body_jumbo = format_body(
+    keys=keys,
+    values=productos_jumbo
+)
+
+
