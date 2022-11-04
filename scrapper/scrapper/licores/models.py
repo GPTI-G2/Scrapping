@@ -17,13 +17,15 @@ class ScrapLicores(ABC):
       links: List[str],
       sizes: List[str],
       classes: Dict[str, List[str]],
-      expected_class: str
+      expected_class: str,
+      store: str
     ):
     self.links = links
     self.classes = classes
     self.types = types
     self.sizes = sizes
     self.expected_class = expected_class
+    self.store = store
     self.tags = ['div', 'span', 'h1', 'h2', 'p']
     self.columns = ["sku", "Name", "image_url", "Price"]
   
@@ -57,11 +59,12 @@ class ScrapLicores(ABC):
     info = []
     info = self.get_skus(html_soup, info)
     info = self.get_brand(html_soup, info)
-    info.append(size)
     info = self.get_names(html_soup, info)
+    info.append(size)
     info = self.get_image_url(html_soup, info)
     info = self.get_price(html_soup, info)
     info.append(product_type)
+    info.append(self.store)
     return info
 
 
@@ -72,13 +75,14 @@ class ScrapLicoresJumbo(ScrapLicores):
       links: List[str],
       sizes: List[str],
       classes: Dict[str, List[str]] = {
-          "sku": ["product-sku"], 
+          "sku": ["product-code"], 
           "name": ["product-name"],
           "brand": ["product-brand"],
           "image_url": ["zoomed-image"],
           "price": ["price-best", "product-sigle-price-wrapper"],
       },
-      expected_class: str = "zoomed-image"
+      expected_class: str = "zoomed-image",
+      store: str = None,
     ):
     
     self.links = links
@@ -86,7 +90,8 @@ class ScrapLicoresJumbo(ScrapLicores):
     self.types = types
     self.sizes = sizes
     self.expected_class = expected_class
-    self.tags = ['div', 'span', 'h1', 'h2', 'p']
+    self.store = store
+    self.tags = ['div', 'span', 'h1', 'h2', 'p', "a"]
     self.columns = ["sku", "Name", "image_url", "Price"]
   
 
@@ -213,15 +218,17 @@ class ScrapLicoresLider(ScrapLicores):
           "image_url": ["styled__FigureContainer-sc-13lpau7-2"],
           "price": ["pdp-mobile-sales-price"],
       },
-      expected_class: str = "styled__FigureContainer-sc-13lpau7-2"
+      expected_class: str = "styled__FigureContainer-sc-13lpau7-2",
+      store: str = None,
     ):
     
     self.links = links
     self.types = types
     self.sizes = sizes
     self.classes = classes
+    self.store = store
     self.expected_class = expected_class
-    self.tags = ['div', 'span', 'h1', 'h2', 'p']
+    self.tags = ['div', 'span', 'h1', 'h2', 'p', 'a']
     self.columns = ["sku", "Name", "image_url", "Price"]
   
 
