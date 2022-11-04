@@ -1,0 +1,11 @@
+name: run scrapper everyday
+
+on:
+  schedule:
+    - cron '15 1 * * *'
+
+jobs:
+  build-container:
+    steps:
+      - uses: actions/checkout@v3
+      run: docker compose up
