@@ -1,6 +1,6 @@
 from scrapper.licores.models import ScrapLicoresJumbo, ScrapLicoresLider
 from scrapper.driver.search import search, format_body
-
+from scrapper.api_connection.store import post_products_to_store
 
 # Licores
 links_lider = {
@@ -64,5 +64,26 @@ body_jumbo = format_body(
     keys=keys,
     values=productos_jumbo
 )
+body_lider = format_body(
+    keys=keys,
+    values=productos_lider
+)
 
+try:
+    post_products_to_store(
+        store="Lider",
+        products_list=productos_lider
+    )
+except Exception as e:
+    print(e)
+    print("No se pudo realizar la request al lider!")
+
+try:
+    post_products_to_store(
+        store="Jumbo",
+        products_list=productos_jumbo
+    )
+except Exception as e:
+    print(e)
+    print("No se pudo realizar la request al jumbo!")
 
