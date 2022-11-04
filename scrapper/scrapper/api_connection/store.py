@@ -8,6 +8,6 @@ def post_products_to_store(
     headers = {"Content-Type": "application/json; charset=utf-8"}
     payload = { "store": store, "products_list": products_list }
     print(payload)
-    url = 'https://backend-gpti.herokuapp.com/api/v1/update-products'
+    url = 'https://backend-gpti.herokuapp.com/api/stores/'
     response = requests.post(url, json=payload, headers=headers)
     print(response)
