@@ -2,7 +2,8 @@ name: Run Scrapper Everyday
 
 on:
   schedule:
-    - cron '0 17 * * *'
+    # Run every dat at 17:05
+    - cron: '5 17 * * *'
 
 jobs:
   containerized-main:
