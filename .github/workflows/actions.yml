@@ -9,11 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Scrap Alcoholes
       steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        
-        - name: Docker Build
-          run: docker-compose build
-        
-        - name: Scrap Alcoholes
-          run: docker-compose up
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Docker Build
+        run: docker-compose build
+      
+      - name: Scrap Alcoholes
+        run: docker-compose up
