@@ -1,11 +1,19 @@
-name: run scrapper everyday
+name: Run Scrapper Everyday
 
 on:
   schedule:
-    - cron '30 1 * * *'
+    - cron '55 16 * * *'
 
 jobs:
   build-container:
   runs-on: ubuntu-latest
     steps:
-      run: docker compose up
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Docker Build
+      run: docker-compose build
+    
+    - name: Scrap Alcoholes
+      run: docker-compose up
+
