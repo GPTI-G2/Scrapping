@@ -11,7 +11,9 @@ chrome_options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome('chromedriver', options=chrome_options)
 
 def get_html_soup(url: str, expected_class: str):
+    print("")
     print("Doing request!")
+    print("Expected class is:", expected_class)
     driver.get(url)
     wait = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, expected_class))

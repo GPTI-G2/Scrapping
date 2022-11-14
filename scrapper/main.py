@@ -1,4 +1,4 @@
-from scrapper.licores.models import ScrapLicoresJumbo, ScrapLicoresLider
+from scrapper.licores.models import ScrapLicoresJumbo, ScrapLicoresLider, ScrapLicoresLiquidos
 from scrapper.driver.search import search, format_body
 from scrapper.api_connection.store import post_products_to_store
 
@@ -17,7 +17,13 @@ links_jumbo = {
     "alto-normal-1000": "https://www.jumbo.cl/pisco-alto-del-carmen-1-l-35/p",
     "mistral-normal-750": "https://www.jumbo.cl/pisco-mistral-750-cc-35/p",
     "corona-6-330": "https://www.jumbo.cl/cerveza-corona-botella-6x330cc-2/p",
-    "royal-guard-12-350": "https://www.jumbo.cl/cerveza-royal-guard-pack-12-unid-lata-350-cc-cu/p",    
+    "royal-guard-12-350": "https://www.jumbo.cl/cerveza-royal-guard-pack-12-unid-lata-350-cc-cu/p",
+}
+
+links_liquidos = {
+    "alto-normal-1000": "https://www.liquidos.cl/productos/1180/pisco-alto-del-carmen-1-litro-35-grados-liquidos-cl",
+    "mistral-normal-750": "https://www.liquidos.cl/productos/18987/pisco-mistral-35-botella-750cc",
+    "corona-6-330": "https://www.liquidos.cl/productos/746/cerveza-corona-botella-330-cc-x6-liquidos-cl",
 }
 
 sizes = [
@@ -26,6 +32,12 @@ sizes = [
     "1 x 750 cc.",
     "6 x 330 cc.",
     "12 x 350 cc."
+]
+
+sizes_liquidos = [
+    "1 x 1000 cc.",
+    "1 x 750 cc.",
+    "6 x 330 cc."
 ]
 
 scrapper_jumbo = ScrapLicoresJumbo(
@@ -42,13 +54,21 @@ scrapper_lider = ScrapLicoresLider(
     store = "Lider"
 )
 
+scrapper_liquidos = ScrapLicoresLiquidos(
+    types= list(links_liquidos.keys()),
+    links = list(links_liquidos.values()),
+    sizes = sizes_liquidos,
+    store = "Liquidos"
+)
+
 productos_jumbo = search(scrapper_jumbo)
 productos_lider = search(scrapper_lider)
+productos_liquidos = search(scrapper_liquidos)
 
 print(productos_jumbo)
 print(productos_lider)
+print(productos_liquidos)
 
-#TODO: sent data to backend
 keys = [
     "sku",
     "name",
@@ -68,6 +88,10 @@ body_lider = format_body(
     keys=keys,
     values=productos_lider
 )
+body_liquidos = format_body(
+    keys=keys,
+    values=productos_liquidos
+)
 
 try:
     post_products_to_store(
@@ -86,4 +110,13 @@ try:
 except Exception as e:
     print(e)
     print("No se pudo realizar la request al jumbo!")
+
+try:
+    post_products_to_store(
+        store="Liquidos",
+        products_list=productos_liquidos
+    )
+except Exception as e:
+    print(e)
+    print("No se pudo realizar la request al liquidos!")
 

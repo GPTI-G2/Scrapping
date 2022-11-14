@@ -26,7 +26,7 @@ class ScrapLicores(ABC):
     self.sizes = sizes
     self.expected_class = expected_class
     self.store = store
-    self.tags = ['div', 'span', 'h1', 'h2', 'p']
+    self.tags = ['div', 'span', 'h1', 'h2', 'p', 'img']
     self.columns = ["sku", "Name", "image_url", "Price"]
   
   @abstractmethod
@@ -339,3 +339,137 @@ class ScrapLicoresLider(ScrapLicores):
     else:
         info.append(None)
     return info
+
+class ScrapLicoresLiquidos(ScrapLicores):
+    def __init__(
+      self,
+      types: List[str],
+      links: List[str],
+      sizes: List[str],
+      classes: Dict[str, List[str]] = {
+          "sku": ["jss11"],
+          "name": ["jss11"],
+          "brand": ["jss11"],
+          "image_url": ["jss8"],
+          "price": ["jss14"],
+      },
+      expected_class: str = "jss8",
+      store: str = None,
+    ):
+    
+        self.links = links
+        self.types = types
+        self.sizes = sizes
+        self.classes = classes
+        self.store = store
+        self.expected_class = expected_class
+        self.tags = ['div', 'span', 'h1', 'h2', 'p', 'a', 'img']
+        self.columns = ["sku", "Name", "image_url", "Price"]
+
+    def get_image_url_from_style_string(self, *args):
+        print("Won't use")
+        pass
+
+    def get_skus(self, html_soup, info):
+        found = False
+        for tag in self.tags:
+            for className in self.classes["sku"]:
+                sku = (html_soup.find(tag, class_=className)).find("h1", recursive=False)
+                if sku:
+                    found = True
+                    break
+            if found:
+                break
+        if found:
+            try:
+                sku = sku.string
+                info.append(sku)
+            except Exception as e:
+                print(e)
+                info.append(None)
+        else:
+            info.append(None)
+        return info
+
+    def get_names(self, html_soup, info):
+        found = False
+        for tag in self.tags:
+            for className in self.classes["name"]:
+                name = (html_soup.find(tag, class_=className)).find("h1", recursive=False)
+                if name:
+                    found = True
+                    break
+            if found:
+                break
+        if found:
+            try:
+                name = name.string
+                info.append(name)
+            except Exception as e:
+                print(e)
+                info.append(None)
+        else:
+            info.append(None)
+        return info
+
+    def get_brand(self, html_soup, info):
+        found = False
+        for tag in self.tags:
+            for className in self.classes["brand"]:
+                brand = (html_soup.find(tag, class_=className)).find("h1", recursive=False)
+                if brand:
+                    found = True
+                    break
+            if found:
+                break
+        if found:
+            try:
+                brand = brand.string
+                info.append(brand)
+            except Exception as e:
+                print(e)
+                info.append(None)
+        else:
+            info.append(None)
+        return info
+
+    def get_image_url(self, html_soup, info):
+        found = False
+        for tag in self.tags:
+            for className in self.classes["image_url"]:
+                style_image_url = (html_soup.find(tag, class_=className))
+                if style_image_url:
+                    found = True
+                    break
+            if found:
+                break
+        if found:
+            try:
+                print(style_image_url)
+                image_url = style_image_url["src"]
+                info.append(image_url)
+            except:
+                info.append(None)
+        else:
+            info.append(None)
+        return info
+    def get_price(self, html_soup, info):
+        found = False
+        for tag in self.tags:
+            for className in self.classes["price"]:
+                price = (html_soup.find(tag, class_=className))
+                if price:
+                    found = True
+                    break
+            if found:
+                break
+        if found:
+            try:
+                price = price.string.split("$")[1]
+                info.append(price)
+            except Exception as e:
+                print(e)
+                info.append(None)
+        else:
+            info.append(None)
+        return info
