@@ -16,4 +16,10 @@ Diseño de arquitectura establecida
 Desarrollo del scrapper
 filtracion de datos
 Generacion de payload para enviar al backend con formato solicitado
-Intento a coneccion con backend (Fallida)
+Intento a conexion con backend (Fallida)
+
+3/11 - 13/11
+
+Incorporación de Líquidos entre los locales
+Conexión con el backend exitosa
+Añadir el workflow para obtener valores diariamente de los productos
