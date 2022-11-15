@@ -96,7 +96,7 @@ body_liquidos = format_body(
 try:
     post_products_to_store(
         store="Lider",
-        products_list=productos_lider
+        products_list=body_lider
     )
 except Exception as e:
     print(e)
@@ -105,7 +105,7 @@ except Exception as e:
 try:
     post_products_to_store(
         store="Jumbo",
-        products_list=productos_jumbo
+        products_list=body_jumbo
     )
 except Exception as e:
     print(e)
@@ -114,7 +114,7 @@ except Exception as e:
 try:
     post_products_to_store(
         store="Liquidos",
-        products_list=productos_liquidos
+        products_list=body_liquidos
     )
 except Exception as e:
     print(e)
