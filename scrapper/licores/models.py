@@ -195,8 +195,10 @@ class ScrapLicoresJumbo(ScrapLicores):
             break
     if found:
         try:
-            price = price.string.strip("$")
-            info.append(price)
+            price = price.string.split("$")[1]
+            filtered_price = price.split(".")
+            filtered_price = int("".join(filtered_price))
+            info.append(filtered_price)
         except Exception as e:
             print(e)
             info.append(None)
@@ -331,8 +333,10 @@ class ScrapLicoresLider(ScrapLicores):
             break
     if found:
         try:
-            price = price.string.strip("$")
-            info.append(price)
+            price = price.string.split("$")[1]
+            filtered_price = price.split(".")
+            filtered_price = int("".join(filtered_price))
+            info.append(filtered_price)
         except Exception as e:
             print(e)
             info.append(None)
@@ -466,7 +470,9 @@ class ScrapLicoresLiquidos(ScrapLicores):
         if found:
             try:
                 price = price.string.split("$")[1]
-                info.append(price)
+                filtered_price = price.split(".")
+                filtered_price = int("".join(filtered_price))
+                info.append(filtered_price)
             except Exception as e:
                 print(e)
                 info.append(None)
